@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>统一登录中心</title>
+<meta http-equiv=content-type content="text/html; charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<link href="/static/css/login.css?v=1c8fc4a3" rel="stylesheet">
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+<script src="/static/node_modules/jquery/dist/jquery.js?v=6d7acc23"></script>
+<script>if (window.module) module = window.module;</script>
+</head>
+<body id="login">
+<div id="doc" class="mission">
+<div id="l-hd">
+<span class="logo"></span>
+<span class="corner" id="corner"></span>
+</div>
+<div id="l-bd" class="cf">
+<div class="promotion-banner" id="topic">
+<div class="login-section-bg" id="section">
+<div class="login-section">
+<div class="login-tabs login-type-qrcode">
+<div class = "login-tab login-tab-form"
+style="display:none"
+>
+<a class="login-toggle login-toggle-form" data-type="form">账号密码登录</a>
+<img id="qrcode-img" data-type="qrcode" class="login-toggle login-toggle-qrcode change-login-type" alt="点击更换登录类型" title="点击更换登录类型" src="/static/images/login/qrcode-login.png">
+</div>
+<div class="login-tab login-tab-qrcode"
+>
+<a class="login-toggle login-toggle-qrcode" data-type="qrcode">快速登录</a>
+<img id="form-img" data-type="form" class="login-toggle login-toggle-form change-login-type" alt="点击更换登录类型" title="点击更换登录类型" src="/static/images/login/form-login.png">
+</div>
+<a class="login-status">切换状态</a>
+</div>
+<div class="login-container login-qrcode-container"
+>
+<div class="login-help">
+<div class="login-desc">
+<span class="text-red qr-text">大象扫描, 快速登录</span>
+</div>
+<div id="qr-code"></div>
+</div>
+<p class="login-qrcode-download">
+还没有安装大象？<a target="_blank" href="http://x.sankuai.com/downloadPagePc">立即下载</a>
+</p>
+</div>
+<div class="login-container login-form-container"
+style="display:none"
+>
+<form class="login-form" id="form-submit" action="/login" method="post">
+<div class="form-field form-field--icon">
+<i class="icon icon-user"></i>
+<input type="text" id="login-username"
+name="username" placeholder="用户名，不包含@后缀" value="">
+</div>
+<div class="form-field form-field--icon">
+<i class="icon icon-password"></i>
+<input type="password" id="login-password"
+name="password" placeholder="密码" value="">
+</div>
+<div class="login-cf">
+</div>
+<div class="form-field form-field-submit">
+<input type="button" class="btn btn-login-submit" name="commit" value="登录">
+</div>
+<div class="form-field-other cf">
+<a tabindex="-1" class="forget-password" href="/pass/forget">忘记密码？</a>
+<input type="hidden" name="service" value="https://ssosv.sankuai.com/oauth2.0/callbackAuthorize?callbackTicket=07df4f87a45d4a119462d2329e2d4b92"/>
+<input type="hidden" name="key" value=""/>
+<input type="hidden" name="appkey" value="com.sankuai.it.ead.citadel"/>
+<input id="os" type="hidden" name="os" value=""/>
+<input id="screen" type="hidden" name="screen" value=""/>
+<input type="hidden" name="isRemembered" value="false"/>
+<input type="hidden" name="key" value=""/>
+<input type="hidden" name="timeout" value=""/>
+<input type="hidden" name="lt" value="LT-1140180-eXn79wP6FhwnmuKsjjeqdkTD4Dliyi-ssosv.it" />
+<input type="hidden" name="callbackTicket" value="07df4f87a45d4a119462d2329e2d4b92" />
+<input type="hidden" name="_eventId" value="submit" />
+<input type="hidden" name="execution" value="eb1a5ff7-a57e-47e1-8d79-7dd15f7a0a71_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuYWs1aU1HeDBjMVkzU1c1aGNXVmhWV0ZLZEhKUGJVVkJURGM1V2k4Mkx6WlhURmgwTUdOalVWRTJkbHBRUW1wWGNFd3ZORlY2VUVRcmIwaGphRVEzUldOcVFsTmphbTVqUkcxdmN6QnFPR0pHU25SNFVXRnNWMVp1Ymt4NFJETTROVWhpV2xVMVUxRTBNVWxZUjNWV2IxUTNNMHhzUVdSNlYzRm9lSGxaWTFOM1dITnFPRXMyTjFSS1JsTllVMk5MYTFaTmNpdFBkbFJNUmxKVk1uRlVNVlIyVm1JMUsyMHdLMWRpYlZoMWVFbDFlbFpUY2pWT1RFdDBOM1ExZFdsa1dFVkZibUpuZUZSc1R6aG9XRWQ1V1hOeGIyUTRkRk5QWVRZeE55dHZXbXhHVFd0QlNpdERZbEJLS3pWc2VHOVFLMEZsVDNaeFF5OHdSbkJDYUVsdllUTmFTSFYyYURkTmJUSjFSVzl3YkhObmQwdFdibTVGTW5SMFRtcEVOWFp5VjJscVUzZE5XRTB6T0hScGJuaFRSV0UxT1N0aU5GcHZRa1UzTm14MU16bHJNVUo0WldaQk9XdDBTRlowVmpORmFWaHRRMEZGZDJRdldrcENWVU0zWlZGNlZHc3piSEUxYm1oak9IQkpNMlZWV1hnNVMyaFpNVVJGUWs5emFXWkRlWGd2ZUhsVFMzQTFhbHBaVkVoSE1tOWxZaXRoV2pkTVJtSktUalZSVVRKYWJWTXJSbWhwTmxaTE5YbHhTbXBMTDJOR1RtTmljRmx0TnpSblkyWk9Wa2d3UW5SMlNqVlpUR1JYZERFMmFsY3ZZekI0UzJkSlVrTXdOekp0ZGl0d1VVSXpiV3hsVlhvdmVYazNObU5QUkRocGNWUlVNWGxrVDBZMU5Wb3JVMmxsS3pZdk1HaGFTRTk1ZFZKd05taHVRbWhvVDBWbE9FVllMMXB3U0ROSFkydHJXR3M0YlhKMFFtbGFRazFaV1ZGcE1UZEZNVEZoTkZsS2VqTTRlWHB1Y21KS1NFNDBaWE0zV21GcU5ucHNkRGhtZVdKeFpVNXdhbkpRVlU4eloyMURkalpDVUVoQ00xcFVRVXhqZWxsT1NubEpSbmhWVUZrMlYzWXpVbEowYUdSaVJVVjZiMlZuZERWWmFUVlRPR2xKZW1kMU1VOURia3RQYjFKTVIydE1TMlJwYTFKWVdTOVZiWE41WkV4cFNHeDJZbWhCVGxSV2RWYzBSRm92SzBaU2FVMVNlV1pKZGxFMVpIaEhWU3NyTldkRlJWUnZjalZVTkdKS1NGTmFWemx3UzA1WGJVbGFRblJQWkdkclVVdFFVM0puZFhONWJFOW9RVFZ2Y2xabmJrNXpUbVppTHpsaVUwcHJXbUp5VHpGVmFWbFdkakJWVmtObU9HY3llVXhKY0hnME9GVm9ZekF2VEdSYVkyOXdTVmhrWVRKaGNHOXFMMVZIU2pGc2FrSlpUSFpZTXpOYVlYUnNlSEJUTkN0eGJuY3hiRU5pVURKalRFWmhNMFZGVVd3NGJIWkJRV0oxT1dGTlUwMVRSRVZpVEZCbGNGWllWRTR6TVhKUGVIUkVhVUYwYUdkV1pVUnhWMEpDVG1aSlpEVm5WazFDUzBOMWRWWmpVMVpvZFRZMGNVTmhVRTlZVFRKcVRuTmtRaXRDZVdncmFrMXNkR2c0ZEROSFpuSjROM1V4VFN0Sk9HczFhM1EzY1ZWbVVHczBlbGRxWlVOUGJrUk1jRk4xVjFab1dDOW5UVFZwWkZCRmRHdENWa1ZxVW1KTlZtRklVRGhwYjI1T2QxVnBValoxSzNkWWRWQllXRkJNTjNaT2VFbG9kVVptY1dSelJsSlVTRzEyTVN0eWNHODBkVkZDZWsxTmVuRk5VRlZUVmxFMVdGZDVZalZVVURkbFluSlZiVlZFT1d4MlFrZHlZM2QxZURoc05GbHdhVzFQVjJ4WlZqaG9kV0ZSTDJrNFMxcEZiRlpOWVdWNU1VeEpXR014UmpkcGR5dG9ORTl3YzBJeEsxbDRWbFJ5UlU5c00zVmxlbmt3V2xKRVNtTlBUM1JDVURGTmMyZFBNMDVDV21SaE4xQnBjbmwxTTJ0eGR6RklSSFJXZUVGcWRqZHJla2RLT0U5blNsaE9PRzU1WkdoMlpqbGhPWEJPU205cGFtWlJOMkZCU0hob2QwOVVhVUpXYkhFeU1IcGtkSEY1ZW5oRlpETkVSVTlCV2l0UlZUTnFTSEJPY3pJd016aHVWRkZMZHpGemVFRTNVV3hNTlZSbWJteENMM28wZDBwcVFWWTJZM292VkhwTFpHMUtaMmxRVkZwRlJuTnpSV0V2VUVwNFIxUkNPVkJTVFc1NVdETkJRVlJpZUUxTFJEQkdSMWxPVG5kUEwyc3JRVTkwYVd0NE5VUjRSWFl2TTIxVWRsUkhlbkpXV2tsUE5FaE9WM1p2T0RocVNtaExjV1Z4WlhGVFpsTnNSVE56ZVhreE16Tm9hRTlKWlVOM2EzUm9ZVkV2WlZaTFRUSmhXR1l5Vmt3NU9FWjBjMUZNYm1VMVZGSnFSSEE1VUc1alVYVTFkRXBtWW05cmRXaG5hbkJ0YjFoeGRVdHJkRkp0ZGsxUFRGbEJNekZZZFdoMVVVMVJla3hhY0dSRmRYVlhURzEyZVd4UkwyTTBVRVF4V0ZWbmRUSnhTREpaVVhkb2VFdFBWWHBFUjNwemJVNXJOVmRHVGxwcU0zUlpiRmwzUVZCUGEwcDZNMEo2Vm1oblIxTXZiWHA2ZEZVeVNXaHZMMk15ZDBwMFRGSXdORTFMY0ZsT09UWnFlak40WWxkRFJsSnpNblE1VUhBelVETTRWSFZzSzJVMVRWVnJZak50V1VOR1psZGpTWHBGYzFwalNUUTRkRkJST1hWUksxbGtRV2t6WmtKVFpWSlpRVVJuVm1keFEwdzJibGhuVldKMllXRmljMlZCWXk5dU1ISTNRelpDTkd0bmRFVnJNa3Q0UTNRd1EyMXRURzQyZGtOd1VHdFdkSEJqZWpsVk56QmFZbEZUV0RSbFpVMVJSWFE0Y1hwa1ZYSTJXVW8zVFRCbWIzRjZUbHBYVjJsVlYxVkxOSFJYUWtVMGJqbElNelE1V0hCWWFVUnNMM2cyUTFCbVJWUjBTQ3RYZDI5S1dIcHpTR2RMVEVOdGVscDFjemRCUkdnM2FXbG5VbHBYVG5wWVFVUlNNWEZZVG5aYVpUQnJjbk5SWmtSS1RHeEtLMEZMUmtaeFRucHFSR3BtV2tNdldXSmlaVVZGUTFNdk1XWkdRemRWYVZwRVZUQTVRbFJJWkROUllqbFZTRU5PTVVWMWRrUllTVWhEYm5JeFRtUlFhMUpvVGpaTU4xSTBOR3RzYWtkd1dYVjZLMEZtUm5kaFluTnBibEI2VkRod1RuaEpOQ3N5ZFhkUFRrUnRPR0ZaTm5rME9YcHBUbFZDYmxaSk1VTnpURkpCYmtKSU5uZ3dXSGRrUkVaaFNqZEVhRFZMZFVjeVZqWjVTR2hqYVVoTlRtOHlRVVpEVVVSbFZIVjNOMlZJUVdOSlNFRnBia2RGYjBnM1NWTTRiVU5aTnpSR2VFUktZbWsxY2pWWU9WWndORFZXUVVoNEt6WkhOak5YUjI1RE5tcEpjRGd5Tlc4dlZsVm1ZbHB3TmtwMWFtVndWbXhSVGl0cmREUnZlalp0Ym1jNVFYb3ZhMlF6VGpkSWJtUm9hamxYWmxCNE5VMXROMnhpUmpBd2RWbFFXVlZpTDFKV1VWTk9ZV1JOTldaTlVuSlNjR05WYkVsaFVITlVVMVJOUjBsUVMzbFVhRUUzVlZadk1UUlVha3g2TTIxTmMzaHZOVlZOYjBoMlRqUnVUM2c0YjBWT05HZG1XVUkzY1ZwREsycElSREphV0hZNGNuWk1aSEpST1VVeFlYTXphVlUwY0V0T1FpOVRUR05XVEZSRmNFWTRSMmxIVDFwbWEwMDBVazQ0UlZac1ZtaFlZbWRYZFd0eVExSlVjVmQ0UW1aeVRUQlFiVkYyZW5SVVQwdDFNM0Y2VDBWMk9FbHRNRW8zT1U5UE5FRktSbVZqVjNka2VUQkVhbTkxUmxoSmRtNXJWeXRwYnpGV2NEZE5lVlptVG5OeWVtaGthVGhxVmxOWFIydG9RM2xUU1hwVFpXWkJXRGhrY2tNMFMzRTBOMU5TZUc1S2JHd3JZVGd4V1hKMFpVSjRUa0pqYmpsc1JUUlBjWFZNYml0a1lXcFBlRmxrZG5SUVYzb3lOMkUwZUV0M2JGVlZWVzlvZDJKdFltOTJRelZ4V25vd1lqSlpTV2hWWVhOSlFteHhkVm96WTNGc0t6bGlkRE4wUm1SM2FHUjBjMkZqYmxkSEx6WmxSazlWU1RZMFZFODJiSFI0TVdKbVZHY3dZMlYwVXl0RE9EVlFTME16WVhGbUwxcFdjWEZ2U0hSTFkwc3dSR0ZJTTB0RlFTdHhWR3BLV0dWWk5YbHpiazlSVEdWSVZFaFlkVXdyVVZNemVtRlJTa2xoY0ZaUmRWaG9SRXRMYTA5UU1tZEdjRWRaY2xGQlJHOXZVbUZEZG1SSVJYUkhWbmxJWTFCWVZrbzNjSEpZVUcwelpGVkZOMUIxTld0RVRsWkNhMkpVZEU1T1NsZGpTbFYzYm1sdlppdEhSR1Z5TjI1VE5HbFFjRlZ5WVc5TGFIRllhblJqYlRsNE5qWlhOVmxsZVZsaWFYWnZVMWhDUmpGcE9HWjFSVU5rUkUxNlJGWXJjMVEyU0ZRMVVsQlpUbWMxZDFkc2FEUXJjVFl2VlhacFNrNXBRalY1YTFOdWNVNVpkMVJSUkRrMWFXVnFNa2htTms5NFFqaGhSbTB4WmpSd1FqVklUSG94YXpoemVsbFBaVzkwWlRGRFVWZFpjRUp4T0U0eFMwZ3JhWGhKUVhoMWR6TndLMVZ3TTJwamVrbHdibUZLUVhwQ2NXbEdVazF4ZFU1TFNIWTNjVVpKV210WmIxRlNURUY2V0ZJM2NqSmFVVmwyUml0ck0zRjBMMFZMTVZaYVMyd3hUbVUxYjJsSWFFcFFUak5XTjFvclVsbHNOak40UlRWR1Mwc3lVMDVZWlRsVGNYQTBhMjE1VlhaWmJsVmhUVWRpTWxSc0sxUjROMVpOTkZsWGEzRmpUR0kxVVRWdmJEVkNXVWhqSzAxVGVsWnZiVk5zVUdvdloxRnZORmx2VWt0T1NFSjRXa2h1UkVoekwxbHhTRVZMWTBkb1F6UXhkUzlNWmpCbGVtVjNabVpXYm5KSU4yaEpkV3BPVGpad2NraG1ObU55UWpJMmRqaHliM0ZoVmxSQlkyMWtkMW93YTA1Rk5WZGpWeXRSVUVJMFdrMTNQVDAuTzBvam8tQ01rcVkxRWlnM2dBTk9GNGp6Slk0VGxuNDJ2VVZjZ1RaUERtRUtISktUc1gtd1g5TUF0UEc3R1JvUk1vQ2JjYmtvYlFaZjUzd3p4RVVhQXc=" />
+</div>
+</form>
+</div>
+</div>
+<p class="feedback">
+<i class = "icon icon-feedback"></i>
+<a href="mailto:6000@meituan.com">问题反馈</a>
+</p>
+</div>
+</div>
+</div>
+<div id="l-ft">
+</div>
+</div>
+<script type="text/javascript">
+function encodeText() {
+var link = $('.forget-password'),
+href = link.attr('href'),
+service = encodeURIComponent($('[name="service"]').val()),
+appkey = $('[name="appkey"]').val();
+var hrefWithParam = href + '?service=' + service
+if(appkey) {
+hrefWithParam = hrefWithParam + '&appkey=' + appkey
+}
+link.attr('href', hrefWithParam)
+}
+encodeText()
+var clickForget = false;
+var _ls = window.localStorage;
+function isSupported() {
+try {
+_ls.setItem('~_~', '~');
+_ls.removeItem('~_~');
+return true;
+} catch (e) {
+return false;
+}
+}
+window.onload = function() {
+//设置用户名和是否显示验证码
+if(isSupported()){
+var username = $('#login-username').val();
+// TODO url
+if(!username){
+var _username = _ls?_ls.getItem('_username'):"";
+$('#login-username').val(_username);
+}
+doValidate();
+}
+//
+$("#login-username").bind('input propertychange', function() {
+var username = $(this).val();
+if (username.indexOf("@") !== -1) {
+//$(this).val(username.substr(0, username.indexOf("@")));
+}
+});
+$("#login-username").on('blur', function(){
+setTimeout(function(){
+if(clickForget){
+return;
+}
+doValidate();
+},200);
+});
+$(".forget-password").bind('click',function(e){
+clickForget = true;
+console.info(111);
+window.location.href = $(this).attr('href');
+});
+//输完用户名点回车
+$("#login-username").on('keydown', function(e){
+console.log("username onkeydown");
+if(!e) e = window.event;//火狐中是 window.event
+if((e.keyCode || e.which) == 13){
+doSubmit();
+}
+});
+//输完密码点回车
+$("#login-password").on('keydown', function(e){
+if(!e) e = window.event;//火狐中是 window.event
+if((e.keyCode || e.which) == 13){
+doSubmit();
+}
+});
+$(".btn-login-submit").on('click',function(){
+doSubmit();
+});
+};
+function doValidate(callback){
+var username = $('#login-username').val();
+// TODO url
+if(!username){
+return;
+}
+$.post("/api/verityCode", { username: username}, function(response) {
+var msg = response.data?response.data.msg:false; //response.data.msg的值为false表示不需要验证码,为true表示需要验证码
+var cf = document.querySelector('.login-cf'),
+captcha = document.querySelector(".ipt-captcha");
+//需要验证码时
+if(msg){
+//需要验证码但是验证码的图片不存在时
+if(!captcha){
+var aEl = document.createElement('a');
+aEl.innerHTML = "不清楚？换一张";
+aEl.className = "captcha-field inline-link";
+cf.innerHTML = '<div class="form-field cf ">' +
+'<i class="icon icon-captcha"></i>' +
+'<input id="login-captcha" class="ipt-captcha" type="text" name="captcha" placeholder="验证码" value="">' +
+'<div class="captcha-field form-field-cf" >' +
+'<img id="imageCaptcha" alt="点击更新验证码" title="点击更新验证码" src="/api/generatImage">' +
+'</div></div>';
+var divEl = cf.querySelector('.form-field-cf');
+divEl.appendChild(aEl);
+aEl.addEventListener('click',function(e){
+var img = document.getElementById('imageCaptcha');
+var src = img.src.split('?')[0];
+img.src = src+'?p='+new Date().getTime();
+});
+//输完验证码点回车时登录
+var loginCaptcha = cf.querySelector('#login-captcha');
+if(loginCaptcha){
+loginCaptcha.addEventListener('keydown',function(e){
+if(!e) e = window.event;//火狐中是 window.event
+if((e.keyCode || e.which) == 13){
+doSubmit();
+}
+});
+}
+}
+//需要验证码时执行的回调
+callback&&callback(false);
+return;
+}else if(response.data&&response.data.msg==false&&captcha){ //不需要验证码但是验证码的图片存在时
+cf&&(cf.innerHTML="");
+}
+//不需要验证码时执行的回调
+callback&&callback(true);
+});
+};
+function doSubmit(){
+var captcha = document.querySelector(".ipt-captcha");
+var username = $("#login-username").val();
+var password = $("#login-password").val();
+if(!username||!password){
+return;
+}
+clickForget = false;
+if(captcha){
+if (username.indexOf("@") !== -1) {
+//$("#login-username").val(username.substr(0, username.indexOf("@")));
+}
+//有验证码但是验证码失败了
+if(isSupported()){
+_ls.setItem('_username',username);
+}
+$("#form-submit").submit();
+return;
+}
+doValidate(function(flag){
+if(flag){
+var username = $("#login-username").val();
+var password = $("#login-password").val();
+if(username&&password){
+if (username.indexOf("@") !== -1) {
+// $("#login-username").val(username.substr(0, username.indexOf("@")));
+}
+if(isSupported()){
+_ls.setItem('_username',username);
+}
+$("#form-submit").submit();
+}
+}
+});
+};
+// 添加自动轮播
+(function slide() {
+// 本地存储
+var Local = (function () {
+function isSupported() {
+try {
+localStorage.setItem('~_~', '~')
+localStorage.removeItem('~_~')
+return true
+} catch (e) {
+return false
+}
+}
+return {
+isSupported: isSupported(),
+set: function (name, value) {
+localStorage.setItem(name, value)
+},
+get: function (name) {
+return localStorage.getItem(name)
+}
+}
+})();
+// 背景变换
+function changeBgColor(color, index) {
+const doc = $('#doc')
+doc
+.css('background-color', color['imageTheme'])
+.find('.promotion-banner')
+.css('background', 'url('+ color['imageUrl'] +') no-repeat -44px 46px')
+.css('background-size', 'auto 492px')
+// 为被点击的按钮增加激活状态
+const defaultPath = '/static/images/login/rotate.png'
+const activePath = '/static/images/login/active-rotate.png'
+var images = document.getElementsByClassName('change-bg')
+var length = images.length
+for(var i = 0; i < length; i++) {
+if(images[i]['id'] != index){
+images[i].src = defaultPath
+}
+else {
+images[i].src = activePath
+}
+}
+}
+var Slider = {
+init: function(data, canUse) {
+this.index = 0
+this.colors = data
+this.canUse = canUse || false
+this.defaultTime = 2 * 1000
+if(this.colors.length > 1) {
+this.renderDot(this.colors)
+}
+this.bindEvent()
+this.go(this.getDefaultIndex())
+if(this.canUse) {
+this.generateTimer()
+}
+},
+getDefaultIndex: function() {
+if(Local.isSupported) {
+if(Local.get('bg:index') != null) {
+var index = (+Local.get('bg:index') + 1) % this.colors.length
+this.index = index
+Local.set('bg:index', index)
+return index
+}
+}
+return this.index
+},
+bindEvent: function () {
+var btn = $('.change-bg')
+var that = this
+// 手动切换背景
+btn.on('click', function () {
+that.handleButton.call(this, that)
+})
+},
+renderDot: function(list) {
+const images = ['<ul>']
+for(var index = 0; index < list.length; index++) {
+images.push([
+'<li>',
+'<img id="',
+index,
+'" class="change-bg" alt="点击更换背景色" title="点击更换背景色" src="/static/images/login/rotate.png">',
+'</li>'].join(''))
+}
+images.push('</ul>')
+$('#l-ft').append(images.join(''))
+},
+handleButton: function(slider) {
+var index = $(this).context['id']
+if(slider.canUse) {
+slider.destroyTimer()
+}
+slider.go(index)
+if(slider.canUse) {
+slider.generateTimer()
+}
+},
+generateTimer: function() {
+var that = this
+this.timer = setInterval(function() {
+that.go(++that.index)
+}, this.defaultTime)
+},
+destroyTimer: function() {
+clearInterval(this.timer)
+},
+go: function (index) {
+this.index = index % this.colors.length
+changeBgColor(this.colors[this.index], this.index)
+if(Local.isSupported) {
+Local.set('bg:index', this.index)
+}
+}
+}
+// 获取配置信息
+const configurationAddress = '/api/getLoginImageInfo'
+const defaultInfo = [
+{
+"priority": 3,
+"imageUrl": "http://ssosv.it.test.sankuai.info/static/images/login/pk-v2.png",
+"imageTheme": "#3d3878"
+}
+]
+const getConfigInfo = function (configurationAddress, callback) {
+$.get(configurationAddress, function(response) {
+if(response.dataStatus == 200) {
+return callback(response.data)
+}
+callback(defaultInfo)
+console.error(response.reason || '配置获取异常！')
+}).error(function() {
+callback(defaultInfo)
+})
+}
+getConfigInfo(configurationAddress, function (data) {
+Slider.init(data, false)
+})
+})();
+</script>
+<script src="/static/node_modules/qrcodejs/qrcode.js?v=cb8fa1cf"></script>
+<script src="/static/entrance/login/login-bundle.js?v=06b9c928"></script>
+<script>
+require('main').init({
+appkey: ''
+, service: 'https://ssosv.sankuai.com/oauth2.0/callbackAuthorize?callbackTicket=07df4f87a45d4a119462d2329e2d4b92'
+, image: '/static/images/topic1.png'
+, qrcode: '709db775c95240b192da133919b35e04'
+, isNeedCaptcha: false
+, login: {
+types: [ 'qrcode', 'form' ],
+type: 'form',
+toggle: '.login-toggle'
+}
+});
+/**
+* 自动登录
+*/
+doSubmit();
+</script>
+</body>
+</html>
